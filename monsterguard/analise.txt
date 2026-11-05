@@ -1,0 +1,1490 @@
+Compiled from "Actors.java"
+public final class dev.monsterguard.Actors implements org.bukkit.event.Listener {
+  public static final org.bukkit.NamespacedKey OWNER;
+
+  public static final org.bukkit.NamespacedKey DISPLAY_NAME;
+
+  private static final org.bukkit.NamespacedKey LABEL_PROVIDER;
+
+  private final dev.monsterguard.MonsterGuardPlugin app;
+
+  private final java.util.Map<java.lang.String, dev.monsterguard.Actors$Live> live;
+
+  private final java.util.Set<java.lang.String> warned;
+
+  private final java.util.Set<java.lang.String> spawning;
+
+  public dev.monsterguard.Actors(dev.monsterguard.MonsterGuardPlugin);
+    Code:
+         0: aload_0
+         1: invokespecial #45                 // Method java/lang/Object."<init>":()V
+         4: aload_0
+         5: new           #47                 // class java/util/HashMap
+         8: dup
+         9: invokespecial #48                 // Method java/util/HashMap."<init>":()V
+        12: putfield      #50                 // Field live:Ljava/util/Map;
+        15: aload_0
+        16: new           #52                 // class java/util/HashSet
+        19: dup
+        20: invokespecial #53                 // Method java/util/HashSet."<init>":()V
+        23: putfield      #55                 // Field warned:Ljava/util/Set;
+        26: aload_0
+        27: new           #52                 // class java/util/HashSet
+        30: dup
+        31: invokespecial #53                 // Method java/util/HashSet."<init>":()V
+        34: putfield      #57                 // Field spawning:Ljava/util/Set;
+        37: aload_0
+        38: aload_1
+        39: putfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+        42: return
+
+  public java.util.Collection<dev.monsterguard.Actors$Live> active();
+    Code:
+         0: aload_0
+         1: getfield      #50                 // Field live:Ljava/util/Map;
+         4: invokeinterface #69,  1           // InterfaceMethod java/util/Map.values:()Ljava/util/Collection;
+         9: invokestatic  #75                 // InterfaceMethod java/util/List.copyOf:(Ljava/util/Collection;)Ljava/util/List;
+        12: areturn
+
+  public dev.monsterguard.Actors$Live get(java.lang.String);
+    Code:
+         0: aload_0
+         1: getfield      #50                 // Field live:Ljava/util/Map;
+         4: aload_1
+         5: getstatic     #83                 // Field java/util/Locale.ROOT:Ljava/util/Locale;
+         8: invokevirtual #89                 // Method java/lang/String.toLowerCase:(Ljava/util/Locale;)Ljava/lang/String;
+        11: invokeinterface #92,  2           // InterfaceMethod java/util/Map.get:(Ljava/lang/Object;)Ljava/lang/Object;
+        16: checkcast     #11                 // class dev/monsterguard/Actors$Live
+        19: areturn
+
+  public static java.lang.String owner(org.bukkit.entity.Entity);
+    Code:
+         0: aload_0
+         1: invokeinterface #102,  1          // InterfaceMethod org/bukkit/entity/Entity.getPersistentDataContainer:()Lorg/bukkit/persistence/PersistentDataContainer;
+         6: getstatic     #104                // Field OWNER:Lorg/bukkit/NamespacedKey;
+         9: getstatic     #110                // Field org/bukkit/persistence/PersistentDataType.STRING:Lorg/bukkit/persistence/PersistentDataType;
+        12: invokeinterface #115,  3          // InterfaceMethod org/bukkit/persistence/PersistentDataContainer.get:(Lorg/bukkit/NamespacedKey;Lorg/bukkit/persistence/PersistentDataType;)Ljava/lang/Object;
+        17: checkcast     #85                 // class java/lang/String
+        20: areturn
+
+  public static boolean protectedNpc(org.bukkit.entity.Entity);
+    Code:
+         0: aload_0
+         1: invokestatic  #121                // Method owner:(Lorg/bukkit/entity/Entity;)Ljava/lang/String;
+         4: ifnonnull     35
+         7: aload_0
+         8: invokeinterface #102,  1          // InterfaceMethod org/bukkit/entity/Entity.getPersistentDataContainer:()Lorg/bukkit/persistence/PersistentDataContainer;
+        13: new           #123                // class org/bukkit/NamespacedKey
+        16: dup
+        17: ldc           #125                // String guardtradenpc
+        19: ldc           #127                // String actor
+        21: invokespecial #130                // Method org/bukkit/NamespacedKey."<init>":(Ljava/lang/String;Ljava/lang/String;)V
+        24: getstatic     #110                // Field org/bukkit/persistence/PersistentDataType.STRING:Lorg/bukkit/persistence/PersistentDataType;
+        27: invokeinterface #134,  3          // InterfaceMethod org/bukkit/persistence/PersistentDataContainer.has:(Lorg/bukkit/NamespacedKey;Lorg/bukkit/persistence/PersistentDataType;)Z
+        32: ifeq          39
+        35: iconst_1
+        36: goto          40
+        39: iconst_0
+        40: ireturn
+
+  public dev.monsterguard.ActorRecord from(org.bukkit.entity.Entity);
+    Code:
+         0: aload_1
+         1: invokestatic  #121                // Method owner:(Lorg/bukkit/entity/Entity;)Ljava/lang/String;
+         4: astore_2
+         5: aload_2
+         6: ifnonnull     13
+         9: aconst_null
+        10: goto          18
+        13: aload_0
+        14: aload_2
+        15: invokevirtual #138                // Method get:(Ljava/lang/String;)Ldev/monsterguard/Actors$Live;
+        18: astore_3
+        19: aload_3
+        20: ifnull        51
+        23: aload_3
+        24: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+        27: invokeinterface #147,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getUniqueId:()Ljava/util/UUID;
+        32: aload_1
+        33: invokeinterface #148,  1          // InterfaceMethod org/bukkit/entity/Entity.getUniqueId:()Ljava/util/UUID;
+        38: invokevirtual #154                // Method java/util/UUID.equals:(Ljava/lang/Object;)Z
+        41: ifeq          51
+        44: aload_3
+        45: getfield      #158                // Field dev/monsterguard/Actors$Live.record:Ldev/monsterguard/ActorRecord;
+        48: goto          52
+        51: aconst_null
+        52: areturn
+
+  public void removeOrphans(java.util.Collection<org.bukkit.entity.Entity>);
+    Code:
+         0: aload_1
+         1: invokestatic  #75                 // InterfaceMethod java/util/List.copyOf:(Ljava/util/Collection;)Ljava/util/List;
+         4: invokeinterface #169,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+         9: astore_2
+        10: aload_2
+        11: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        16: ifeq          96
+        19: aload_2
+        20: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        25: checkcast     #98                 // class org/bukkit/entity/Entity
+        28: astore_3
+        29: aload_3
+        30: invokestatic  #121                // Method owner:(Lorg/bukkit/entity/Entity;)Ljava/lang/String;
+        33: astore        4
+        35: aload         4
+        37: ifnonnull     43
+        40: goto          10
+        43: aload_0
+        44: aload         4
+        46: invokevirtual #138                // Method get:(Ljava/lang/String;)Ldev/monsterguard/Actors$Live;
+        49: astore        5
+        51: aload         5
+        53: ifnull        87
+        56: aload_3
+        57: aload         5
+        59: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+        62: invokeinterface #180,  2          // InterfaceMethod org/bukkit/entity/Entity.equals:(Ljava/lang/Object;)Z
+        67: ifne          10
+        70: aload_3
+        71: aload         5
+        73: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+        76: invokeinterface #180,  2          // InterfaceMethod org/bukkit/entity/Entity.equals:(Ljava/lang/Object;)Z
+        81: ifeq          87
+        84: goto          10
+        87: aload_3
+        88: invokeinterface #187,  1          // InterfaceMethod org/bukkit/entity/Entity.remove:()V
+        93: goto          10
+        96: return
+
+  public void spawnAll();
+    Code:
+         0: invokestatic  #200                // Method org/bukkit/Bukkit.getWorlds:()Ljava/util/List;
+         3: invokeinterface #169,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+         8: astore_1
+         9: aload_1
+        10: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        15: ifeq          41
+        18: aload_1
+        19: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        24: checkcast     #202                // class org/bukkit/World
+        27: astore_2
+        28: aload_0
+        29: aload_2
+        30: invokeinterface #205,  1          // InterfaceMethod org/bukkit/World.getEntities:()Ljava/util/List;
+        35: invokevirtual #207                // Method removeOrphans:(Ljava/util/Collection;)V
+        38: goto          9
+        41: aload_0
+        42: getfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+        45: invokevirtual #213                // Method dev/monsterguard/MonsterGuardPlugin.records:()Ldev/monsterguard/Archive;
+        48: invokevirtual #218                // Method dev/monsterguard/Archive.all:()Ljava/util/Collection;
+        51: invokeinterface #219,  1          // InterfaceMethod java/util/Collection.iterator:()Ljava/util/Iterator;
+        56: astore_1
+        57: aload_1
+        58: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        63: ifeq          85
+        66: aload_1
+        67: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        72: checkcast     #160                // class dev/monsterguard/ActorRecord
+        75: astore_2
+        76: aload_0
+        77: aload_2
+        78: iconst_1
+        79: invokevirtual #223                // Method spawn:(Ldev/monsterguard/ActorRecord;Z)V
+        82: goto          57
+        85: return
+
+  public void spawn(dev.monsterguard.ActorRecord, boolean);
+    Code:
+         0: aload_0
+         1: aload_1
+         2: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+         5: invokevirtual #138                // Method get:(Ljava/lang/String;)Ldev/monsterguard/Actors$Live;
+         8: ifnonnull     27
+        11: aload_0
+        12: getfield      #57                 // Field spawning:Ljava/util/Set;
+        15: aload_1
+        16: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+        19: invokeinterface #234,  2          // InterfaceMethod java/util/Set.contains:(Ljava/lang/Object;)Z
+        24: ifeq          28
+        27: return
+        28: aload_1
+        29: invokevirtual #238                // Method dev/monsterguard/ActorRecord.home:()Ldev/monsterguard/Spot;
+        32: invokevirtual #244                // Method dev/monsterguard/Spot.resolve:()Lorg/bukkit/Location;
+        35: astore_3
+        36: aload_3
+        37: ifnonnull     41
+        40: return
+        41: iload_2
+        42: ifne          70
+        45: aload_3
+        46: invokevirtual #250                // Method org/bukkit/Location.getWorld:()Lorg/bukkit/World;
+        49: aload_3
+        50: invokevirtual #254                // Method org/bukkit/Location.getBlockX:()I
+        53: iconst_4
+        54: ishr
+        55: aload_3
+        56: invokevirtual #257                // Method org/bukkit/Location.getBlockZ:()I
+        59: iconst_4
+        60: ishr
+        61: invokeinterface #261,  3          // InterfaceMethod org/bukkit/World.isChunkLoaded:(II)Z
+        66: ifne          70
+        69: return
+        70: aload_0
+        71: getfield      #57                 // Field spawning:Ljava/util/Set;
+        74: aload_1
+        75: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+        78: invokeinterface #264,  2          // InterfaceMethod java/util/Set.add:(Ljava/lang/Object;)Z
+        83: pop
+        84: aload_1
+        85: invokevirtual #268                // Method dev/monsterguard/ActorRecord.kind:()Ljava/lang/String;
+        88: invokestatic  #274                // Method org/bukkit/entity/EntityType.valueOf:(Ljava/lang/String;)Lorg/bukkit/entity/EntityType;
+        91: astore        4
+        93: aload_3
+        94: invokevirtual #250                // Method org/bukkit/Location.getWorld:()Lorg/bukkit/World;
+        97: aload_3
+        98: aload         4
+       100: invokeinterface #278,  3          // InterfaceMethod org/bukkit/World.spawnEntity:(Lorg/bukkit/Location;Lorg/bukkit/entity/EntityType;)Lorg/bukkit/entity/Entity;
+       105: astore        5
+       107: aload         5
+       109: instanceof    #143                // class org/bukkit/entity/LivingEntity
+       112: ifeq          125
+       115: aload         5
+       117: checkcast     #143                // class org/bukkit/entity/LivingEntity
+       120: astore        6
+       122: goto          143
+       125: aload         5
+       127: invokeinterface #187,  1          // InterfaceMethod org/bukkit/entity/Entity.remove:()V
+       132: new           #280                // class java/lang/IllegalArgumentException
+       135: dup
+       136: ldc_w         #282                // String Not a living NPC type
+       139: invokespecial #285                // Method java/lang/IllegalArgumentException."<init>":(Ljava/lang/String;)V
+       142: athrow
+       143: aload         6
+       145: invokeinterface #286,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getPersistentDataContainer:()Lorg/bukkit/persistence/PersistentDataContainer;
+       150: getstatic     #104                // Field OWNER:Lorg/bukkit/NamespacedKey;
+       153: getstatic     #110                // Field org/bukkit/persistence/PersistentDataType.STRING:Lorg/bukkit/persistence/PersistentDataType;
+       156: aload_1
+       157: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+       160: invokeinterface #290,  4          // InterfaceMethod org/bukkit/persistence/PersistentDataContainer.set:(Lorg/bukkit/NamespacedKey;Lorg/bukkit/persistence/PersistentDataType;Ljava/lang/Object;)V
+       165: aload         6
+       167: iconst_0
+       168: invokeinterface #294,  2          // InterfaceMethod org/bukkit/entity/LivingEntity.setPersistent:(Z)V
+       173: aload         6
+       175: iconst_0
+       176: invokeinterface #297,  2          // InterfaceMethod org/bukkit/entity/LivingEntity.setRemoveWhenFarAway:(Z)V
+       181: new           #11                 // class dev/monsterguard/Actors$Live
+       184: dup
+       185: aload_1
+       186: aload         6
+       188: invokespecial #300                // Method dev/monsterguard/Actors$Live."<init>":(Ldev/monsterguard/ActorRecord;Lorg/bukkit/entity/LivingEntity;)V
+       191: astore        7
+       193: aload_0
+       194: getfield      #50                 // Field live:Ljava/util/Map;
+       197: aload_1
+       198: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+       201: getstatic     #83                 // Field java/util/Locale.ROOT:Ljava/util/Locale;
+       204: invokevirtual #89                 // Method java/lang/String.toLowerCase:(Ljava/util/Locale;)Ljava/lang/String;
+       207: aload         7
+       209: invokeinterface #304,  3          // InterfaceMethod java/util/Map.put:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+       214: pop
+       215: aload_0
+       216: aload         7
+       218: invokevirtual #308                // Method configure:(Ldev/monsterguard/Actors$Live;)V
+       221: aload_0
+       222: getfield      #55                 // Field warned:Ljava/util/Set;
+       225: aload_1
+       226: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+       229: invokeinterface #310,  2          // InterfaceMethod java/util/Set.remove:(Ljava/lang/Object;)Z
+       234: pop
+       235: aload_0
+       236: getfield      #57                 // Field spawning:Ljava/util/Set;
+       239: aload_1
+       240: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+       243: invokeinterface #310,  2          // InterfaceMethod java/util/Set.remove:(Ljava/lang/Object;)Z
+       248: pop
+       249: goto          338
+       252: astore        4
+       254: aload_0
+       255: aload_1
+       256: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+       259: invokevirtual #313                // Method despawn:(Ljava/lang/String;)V
+       262: aload_0
+       263: getfield      #55                 // Field warned:Ljava/util/Set;
+       266: aload_1
+       267: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+       270: invokeinterface #264,  2          // InterfaceMethod java/util/Set.add:(Ljava/lang/Object;)Z
+       275: ifeq          302
+       278: aload_0
+       279: getfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+       282: invokevirtual #317                // Method dev/monsterguard/MonsterGuardPlugin.getLogger:()Ljava/util/logging/Logger;
+       285: aload_1
+       286: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+       289: aload         4
+       291: invokevirtual #320                // Method java/lang/Exception.getMessage:()Ljava/lang/String;
+       294: invokedynamic #332,  0            // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+       299: invokevirtual #337                // Method java/util/logging/Logger.warning:(Ljava/lang/String;)V
+       302: aload_0
+       303: getfield      #57                 // Field spawning:Ljava/util/Set;
+       306: aload_1
+       307: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+       310: invokeinterface #310,  2          // InterfaceMethod java/util/Set.remove:(Ljava/lang/Object;)Z
+       315: pop
+       316: goto          338
+       319: astore        8
+       321: aload_0
+       322: getfield      #57                 // Field spawning:Ljava/util/Set;
+       325: aload_1
+       326: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+       329: invokeinterface #310,  2          // InterfaceMethod java/util/Set.remove:(Ljava/lang/Object;)Z
+       334: pop
+       335: aload         8
+       337: athrow
+       338: return
+      Exception table:
+         from    to  target type
+            84   235   252   Class java/lang/Exception
+            84   235   319   any
+           252   302   319   any
+           319   321   319   any
+
+  public void configure(dev.monsterguard.Actors$Live);
+    Code:
+         0: aload_1
+         1: getfield      #158                // Field dev/monsterguard/Actors$Live.record:Ldev/monsterguard/ActorRecord;
+         4: astore_2
+         5: aload_1
+         6: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+         9: astore_3
+        10: aload_0
+        11: aload_1
+        12: invokevirtual #352                // Method updateName:(Ldev/monsterguard/Actors$Live;)V
+        15: aload_3
+        16: aload_2
+        17: ldc_w         #354                // String invulnerable
+        20: iconst_1
+        21: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+        24: invokeinterface #361,  2          // InterfaceMethod org/bukkit/entity/LivingEntity.setInvulnerable:(Z)V
+        29: aload_3
+        30: aload_2
+        31: ldc_w         #363                // String silent
+        34: iconst_1
+        35: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+        38: invokeinterface #366,  2          // InterfaceMethod org/bukkit/entity/LivingEntity.setSilent:(Z)V
+        43: aload_3
+        44: aload_2
+        45: ldc_w         #368                // String glowing
+        48: iconst_0
+        49: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+        52: invokeinterface #371,  2          // InterfaceMethod org/bukkit/entity/LivingEntity.setGlowing:(Z)V
+        57: aload_3
+        58: aload_2
+        59: ldc_w         #373                // String collidable
+        62: iconst_0
+        63: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+        66: invokeinterface #376,  2          // InterfaceMethod org/bukkit/entity/LivingEntity.setCollidable:(Z)V
+        71: aload_3
+        72: aload_2
+        73: invokevirtual #379                // Method dev/monsterguard/ActorRecord.guard:()Z
+        76: ifne          90
+        79: aload_2
+        80: ldc_w         #381                // String gravity
+        83: iconst_0
+        84: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+        87: ifeq          94
+        90: iconst_1
+        91: goto          95
+        94: iconst_0
+        95: invokeinterface #384,  2          // InterfaceMethod org/bukkit/entity/LivingEntity.setGravity:(Z)V
+       100: aload_2
+       101: ldc_w         #386                // String look-at-players
+       104: iconst_1
+       105: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+       108: ifne          125
+       111: aload_3
+       112: aload_2
+       113: invokevirtual #238                // Method dev/monsterguard/ActorRecord.home:()Ldev/monsterguard/Spot;
+       116: invokevirtual #390                // Method dev/monsterguard/Spot.yaw:()F
+       119: fconst_0
+       120: invokeinterface #394,  3          // InterfaceMethod org/bukkit/entity/LivingEntity.setRotation:(FF)V
+       125: aload_3
+       126: instanceof    #396                // class org/bukkit/entity/Ageable
+       129: ifeq          174
+       132: aload_3
+       133: checkcast     #396                // class org/bukkit/entity/Ageable
+       136: astore        4
+       138: aload_2
+       139: ldc_w         #398                // String baby
+       142: iconst_0
+       143: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+       146: ifeq          159
+       149: aload         4
+       151: invokeinterface #401,  1          // InterfaceMethod org/bukkit/entity/Ageable.setBaby:()V
+       156: goto          166
+       159: aload         4
+       161: invokeinterface #404,  1          // InterfaceMethod org/bukkit/entity/Ageable.setAdult:()V
+       166: aload         4
+       168: iconst_1
+       169: invokeinterface #407,  2          // InterfaceMethod org/bukkit/entity/Ageable.setAgeLock:(Z)V
+       174: aload_3
+       175: instanceof    #409                // class org/bukkit/entity/Zombie
+       178: ifeq          210
+       181: aload_3
+       182: checkcast     #409                // class org/bukkit/entity/Zombie
+       185: astore        4
+       187: aload         4
+       189: aload_2
+       190: ldc_w         #398                // String baby
+       193: iconst_0
+       194: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+       197: invokeinterface #411,  2          // InterfaceMethod org/bukkit/entity/Zombie.setBaby:(Z)V
+       202: aload         4
+       204: iconst_0
+       205: invokeinterface #414,  2          // InterfaceMethod org/bukkit/entity/Zombie.setCanBreakDoors:(Z)V
+       210: aload_3
+       211: instanceof    #416                // class org/bukkit/entity/Mob
+       214: ifeq          250
+       217: aload_3
+       218: checkcast     #416                // class org/bukkit/entity/Mob
+       221: astore        4
+       223: aload         4
+       225: iconst_0
+       226: invokeinterface #419,  2          // InterfaceMethod org/bukkit/entity/Mob.setCanPickupItems:(Z)V
+       231: aload         4
+       233: aconst_null
+       234: invokeinterface #423,  2          // InterfaceMethod org/bukkit/entity/Mob.setTarget:(Lorg/bukkit/entity/LivingEntity;)V
+       239: aload         4
+       241: aload_2
+       242: invokevirtual #379                // Method dev/monsterguard/ActorRecord.guard:()Z
+       245: invokeinterface #426,  2          // InterfaceMethod org/bukkit/entity/Mob.setAI:(Z)V
+       250: aload_0
+       251: aload_1
+       252: iconst_0
+       253: invokevirtual #430                // Method equip:(Ldev/monsterguard/Actors$Live;Z)V
+       256: aload_1
+       257: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+       260: ifnull        277
+       263: aload_1
+       264: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+       267: invokeinterface #433,  1          // InterfaceMethod org/bukkit/entity/TextDisplay.remove:()V
+       272: aload_1
+       273: aconst_null
+       274: putfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+       277: aload_2
+       278: ldc_w         #435                // String hologram
+       281: invokevirtual #439                // Method dev/monsterguard/ActorRecord.lines:(Ljava/lang/String;)Ljava/util/List;
+       284: invokeinterface #442,  1          // InterfaceMethod java/util/List.isEmpty:()Z
+       289: ifne          415
+       292: aload_1
+       293: aload_3
+       294: invokeinterface #443,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getWorld:()Lorg/bukkit/World;
+       299: aload_3
+       300: invokeinterface #446,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getLocation:()Lorg/bukkit/Location;
+       305: dconst_0
+       306: aload_3
+       307: invokeinterface #450,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getHeight:()D
+       312: ldc2_w        #451                // double 0.35d
+       315: dadd
+       316: dconst_0
+       317: invokevirtual #455                // Method org/bukkit/Location.add:(DDD)Lorg/bukkit/Location;
+       320: ldc_w         #432                // class org/bukkit/entity/TextDisplay
+       323: invokeinterface #458,  3          // InterfaceMethod org/bukkit/World.spawn:(Lorg/bukkit/Location;Ljava/lang/Class;)Lorg/bukkit/entity/Entity;
+       328: checkcast     #432                // class org/bukkit/entity/TextDisplay
+       331: putfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+       334: aload_1
+       335: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+       338: iconst_0
+       339: invokeinterface #459,  2          // InterfaceMethod org/bukkit/entity/TextDisplay.setPersistent:(Z)V
+       344: aload_1
+       345: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+       348: invokeinterface #460,  1          // InterfaceMethod org/bukkit/entity/TextDisplay.getPersistentDataContainer:()Lorg/bukkit/persistence/PersistentDataContainer;
+       353: getstatic     #104                // Field OWNER:Lorg/bukkit/NamespacedKey;
+       356: getstatic     #110                // Field org/bukkit/persistence/PersistentDataType.STRING:Lorg/bukkit/persistence/PersistentDataType;
+       359: aload_2
+       360: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+       363: invokeinterface #290,  4          // InterfaceMethod org/bukkit/persistence/PersistentDataContainer.set:(Lorg/bukkit/NamespacedKey;Lorg/bukkit/persistence/PersistentDataType;Ljava/lang/Object;)V
+       368: aload_1
+       369: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+       372: getstatic     #464                // Field org/bukkit/entity/Display$Billboard.CENTER:Lorg/bukkit/entity/Display$Billboard;
+       375: invokeinterface #468,  2          // InterfaceMethod org/bukkit/entity/TextDisplay.setBillboard:(Lorg/bukkit/entity/Display$Billboard;)V
+       380: aload_1
+       381: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+       384: iconst_0
+       385: invokeinterface #471,  2          // InterfaceMethod org/bukkit/entity/TextDisplay.setSeeThrough:(Z)V
+       390: aload_1
+       391: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+       394: ldc_w         #473                // String \n
+       397: aload_2
+       398: ldc_w         #435                // String hologram
+       401: invokevirtual #439                // Method dev/monsterguard/ActorRecord.lines:(Ljava/lang/String;)Ljava/util/List;
+       404: invokestatic  #477                // Method java/lang/String.join:(Ljava/lang/CharSequence;Ljava/lang/Iterable;)Ljava/lang/String;
+       407: invokestatic  #483                // Method dev/monsterguard/Words.legacy:(Ljava/lang/String;)Ljava/lang/String;
+       410: invokeinterface #486,  2          // InterfaceMethod org/bukkit/entity/TextDisplay.setText:(Ljava/lang/String;)V
+       415: return
+
+  public void equip(dev.monsterguard.Actors$Live, boolean);
+    Code:
+         0: aload_1
+         1: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+         4: invokeinterface #497,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getEquipment:()Lorg/bukkit/inventory/EntityEquipment;
+         9: astore_3
+        10: aload_3
+        11: ifnonnull     15
+        14: return
+        15: getstatic     #505                // Field org/bukkit/inventory/EquipmentSlot.HEAD:Lorg/bukkit/inventory/EquipmentSlot;
+        18: getstatic     #508                // Field org/bukkit/inventory/EquipmentSlot.CHEST:Lorg/bukkit/inventory/EquipmentSlot;
+        21: getstatic     #511                // Field org/bukkit/inventory/EquipmentSlot.LEGS:Lorg/bukkit/inventory/EquipmentSlot;
+        24: getstatic     #514                // Field org/bukkit/inventory/EquipmentSlot.FEET:Lorg/bukkit/inventory/EquipmentSlot;
+        27: getstatic     #517                // Field org/bukkit/inventory/EquipmentSlot.HAND:Lorg/bukkit/inventory/EquipmentSlot;
+        30: getstatic     #520                // Field org/bukkit/inventory/EquipmentSlot.OFF_HAND:Lorg/bukkit/inventory/EquipmentSlot;
+        33: invokestatic  #524                // InterfaceMethod java/util/List.of:(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/List;
+        36: invokeinterface #169,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+        41: astore        4
+        43: aload         4
+        45: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        50: ifeq          291
+        53: aload         4
+        55: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        60: checkcast     #501                // class org/bukkit/inventory/EquipmentSlot
+        63: astore        5
+        65: aload_1
+        66: getfield      #158                // Field dev/monsterguard/Actors$Live.record:Ldev/monsterguard/ActorRecord;
+        69: aload         5
+        71: invokevirtual #528                // Method dev/monsterguard/ActorRecord.equipment:(Lorg/bukkit/inventory/EquipmentSlot;)Lorg/bukkit/inventory/ItemStack;
+        74: astore        6
+        76: aload         5
+        78: getstatic     #517                // Field org/bukkit/inventory/EquipmentSlot.HAND:Lorg/bukkit/inventory/EquipmentSlot;
+        81: if_acmpne     97
+        84: iload_2
+        85: ifeq          97
+        88: aload_1
+        89: getfield      #158                // Field dev/monsterguard/Actors$Live.record:Ldev/monsterguard/ActorRecord;
+        92: invokestatic  #532                // Method bow:(Ldev/monsterguard/ActorRecord;)Lorg/bukkit/inventory/ItemStack;
+        95: astore        6
+        97: aload         5
+        99: getstatic     #517                // Field org/bukkit/inventory/EquipmentSlot.HAND:Lorg/bukkit/inventory/EquipmentSlot;
+       102: if_acmpne     128
+       105: iload_2
+       106: ifne          128
+       109: aload         6
+       111: ifnull        128
+       114: aload         6
+       116: invokevirtual #538                // Method org/bukkit/inventory/ItemStack.getType:()Lorg/bukkit/Material;
+       119: getstatic     #544                // Field org/bukkit/Material.BOW:Lorg/bukkit/Material;
+       122: if_acmpne     128
+       125: aconst_null
+       126: astore        6
+       128: aload_3
+       129: aload         5
+       131: invokeinterface #547,  2          // InterfaceMethod org/bukkit/inventory/EntityEquipment.getItem:(Lorg/bukkit/inventory/EquipmentSlot;)Lorg/bukkit/inventory/ItemStack;
+       136: astore        7
+       138: aload         7
+       140: invokestatic  #551                // Method dev/monsterguard/ActorRecord.empty:(Lorg/bukkit/inventory/ItemStack;)Z
+       143: ifeq          150
+       146: aconst_null
+       147: goto          152
+       150: aload         7
+       152: aload         6
+       154: invokestatic  #556                // Method java/util/Objects.equals:(Ljava/lang/Object;Ljava/lang/Object;)Z
+       157: ifne          170
+       160: aload_3
+       161: aload         5
+       163: aload         6
+       165: invokeinterface #560,  3          // InterfaceMethod org/bukkit/inventory/EntityEquipment.setItem:(Lorg/bukkit/inventory/EquipmentSlot;Lorg/bukkit/inventory/ItemStack;)V
+       170: aload_1
+       171: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+       174: instanceof    #416                // class org/bukkit/entity/Mob
+       177: ifeq          288
+       180: getstatic     #564                // Field dev/monsterguard/Actors$1.$SwitchMap$org$bukkit$inventory$EquipmentSlot:[I
+       183: aload         5
+       185: invokevirtual #567                // Method org/bukkit/inventory/EquipmentSlot.ordinal:()I
+       188: iaload
+       189: tableswitch   { // 1 to 6
+                       1: 228
+                       2: 238
+                       3: 248
+                       4: 258
+                       5: 268
+                       6: 278
+                 default: 288
+            }
+       228: aload_3
+       229: fconst_0
+       230: invokeinterface #571,  2          // InterfaceMethod org/bukkit/inventory/EntityEquipment.setHelmetDropChance:(F)V
+       235: goto          288
+       238: aload_3
+       239: fconst_0
+       240: invokeinterface #574,  2          // InterfaceMethod org/bukkit/inventory/EntityEquipment.setChestplateDropChance:(F)V
+       245: goto          288
+       248: aload_3
+       249: fconst_0
+       250: invokeinterface #577,  2          // InterfaceMethod org/bukkit/inventory/EntityEquipment.setLeggingsDropChance:(F)V
+       255: goto          288
+       258: aload_3
+       259: fconst_0
+       260: invokeinterface #580,  2          // InterfaceMethod org/bukkit/inventory/EntityEquipment.setBootsDropChance:(F)V
+       265: goto          288
+       268: aload_3
+       269: fconst_0
+       270: invokeinterface #583,  2          // InterfaceMethod org/bukkit/inventory/EntityEquipment.setItemInMainHandDropChance:(F)V
+       275: goto          288
+       278: aload_3
+       279: fconst_0
+       280: invokeinterface #586,  2          // InterfaceMethod org/bukkit/inventory/EntityEquipment.setItemInOffHandDropChance:(F)V
+       285: goto          288
+       288: goto          43
+       291: aload_1
+       292: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+       295: invokestatic  #589                // Method suppressNativeMovement:(Lorg/bukkit/entity/LivingEntity;)V
+       298: return
+
+  public static org.bukkit.inventory.ItemStack bow(dev.monsterguard.ActorRecord);
+    Code:
+         0: aload_0
+         1: ldc_w         #596                // String ranged-weapon
+         4: invokevirtual #600                // Method dev/monsterguard/ActorRecord.item:(Ljava/lang/String;)Lorg/bukkit/inventory/ItemStack;
+         7: astore_1
+         8: aload_1
+         9: ifnull        24
+        12: aload_1
+        13: invokevirtual #538                // Method org/bukkit/inventory/ItemStack.getType:()Lorg/bukkit/Material;
+        16: getstatic     #544                // Field org/bukkit/Material.BOW:Lorg/bukkit/Material;
+        19: if_acmpne     24
+        22: aload_1
+        23: areturn
+        24: aload_0
+        25: getstatic     #517                // Field org/bukkit/inventory/EquipmentSlot.HAND:Lorg/bukkit/inventory/EquipmentSlot;
+        28: invokevirtual #528                // Method dev/monsterguard/ActorRecord.equipment:(Lorg/bukkit/inventory/EquipmentSlot;)Lorg/bukkit/inventory/ItemStack;
+        31: astore_2
+        32: aload_2
+        33: ifnull        50
+        36: aload_2
+        37: invokevirtual #538                // Method org/bukkit/inventory/ItemStack.getType:()Lorg/bukkit/Material;
+        40: getstatic     #544                // Field org/bukkit/Material.BOW:Lorg/bukkit/Material;
+        43: if_acmpne     50
+        46: aload_2
+        47: goto          51
+        50: aconst_null
+        51: areturn
+
+  public void maintainArmor(dev.monsterguard.Actors$Live);
+    Code:
+         0: aload_1
+         1: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+         4: invokeinterface #497,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getEquipment:()Lorg/bukkit/inventory/EntityEquipment;
+         9: astore_2
+        10: aload_2
+        11: ifnonnull     15
+        14: return
+        15: getstatic     #505                // Field org/bukkit/inventory/EquipmentSlot.HEAD:Lorg/bukkit/inventory/EquipmentSlot;
+        18: getstatic     #508                // Field org/bukkit/inventory/EquipmentSlot.CHEST:Lorg/bukkit/inventory/EquipmentSlot;
+        21: getstatic     #511                // Field org/bukkit/inventory/EquipmentSlot.LEGS:Lorg/bukkit/inventory/EquipmentSlot;
+        24: getstatic     #514                // Field org/bukkit/inventory/EquipmentSlot.FEET:Lorg/bukkit/inventory/EquipmentSlot;
+        27: invokestatic  #606                // InterfaceMethod java/util/List.of:(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/List;
+        30: invokeinterface #169,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+        35: astore_3
+        36: aload_3
+        37: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        42: ifeq          112
+        45: aload_3
+        46: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        51: checkcast     #501                // class org/bukkit/inventory/EquipmentSlot
+        54: astore        4
+        56: aload_1
+        57: getfield      #158                // Field dev/monsterguard/Actors$Live.record:Ldev/monsterguard/ActorRecord;
+        60: aload         4
+        62: invokevirtual #528                // Method dev/monsterguard/ActorRecord.equipment:(Lorg/bukkit/inventory/EquipmentSlot;)Lorg/bukkit/inventory/ItemStack;
+        65: astore        5
+        67: aload_2
+        68: aload         4
+        70: invokeinterface #547,  2          // InterfaceMethod org/bukkit/inventory/EntityEquipment.getItem:(Lorg/bukkit/inventory/EquipmentSlot;)Lorg/bukkit/inventory/ItemStack;
+        75: astore        6
+        77: aload         6
+        79: invokestatic  #551                // Method dev/monsterguard/ActorRecord.empty:(Lorg/bukkit/inventory/ItemStack;)Z
+        82: ifeq          89
+        85: aconst_null
+        86: goto          91
+        89: aload         6
+        91: aload         5
+        93: invokestatic  #556                // Method java/util/Objects.equals:(Ljava/lang/Object;Ljava/lang/Object;)Z
+        96: ifne          109
+        99: aload_2
+       100: aload         4
+       102: aload         5
+       104: invokeinterface #560,  3          // InterfaceMethod org/bukkit/inventory/EntityEquipment.setItem:(Lorg/bukkit/inventory/EquipmentSlot;Lorg/bukkit/inventory/ItemStack;)V
+       109: goto          36
+       112: return
+
+  public void alignPostedModel(dev.monsterguard.Actors$Live);
+    Code:
+         0: aload_1
+         1: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+         4: astore_2
+         5: aload_1
+         6: getfield      #158                // Field dev/monsterguard/Actors$Live.record:Ldev/monsterguard/ActorRecord;
+         9: invokevirtual #238                // Method dev/monsterguard/ActorRecord.home:()Ldev/monsterguard/Spot;
+        12: astore_3
+        13: aload_2
+        14: new           #609                // class org/bukkit/util/Vector
+        17: dup
+        18: invokespecial #610                // Method org/bukkit/util/Vector."<init>":()V
+        21: invokeinterface #614,  2          // InterfaceMethod org/bukkit/entity/LivingEntity.setVelocity:(Lorg/bukkit/util/Vector;)V
+        26: aload_2
+        27: aload_3
+        28: invokevirtual #390                // Method dev/monsterguard/Spot.yaw:()F
+        31: fconst_0
+        32: invokeinterface #394,  3          // InterfaceMethod org/bukkit/entity/LivingEntity.setRotation:(FF)V
+        37: aload_2
+        38: aload_3
+        39: invokevirtual #390                // Method dev/monsterguard/Spot.yaw:()F
+        42: invokestatic  #620                // Method dev/monsterguard/NativeAccess.bodyYaw:(Lorg/bukkit/entity/LivingEntity;F)V
+        45: aload_2
+        46: instanceof    #416                // class org/bukkit/entity/Mob
+        49: ifeq          74
+        52: aload_2
+        53: checkcast     #416                // class org/bukkit/entity/Mob
+        56: astore        4
+        58: aload         4
+        60: iconst_0
+        61: invokeinterface #426,  2          // InterfaceMethod org/bukkit/entity/Mob.setAI:(Z)V
+        66: aload         4
+        68: aconst_null
+        69: invokeinterface #423,  2          // InterfaceMethod org/bukkit/entity/Mob.setTarget:(Lorg/bukkit/entity/LivingEntity;)V
+        74: invokestatic  #623                // Method org/bukkit/Bukkit.getOnlinePlayers:()Ljava/util/Collection;
+        77: invokeinterface #219,  1          // InterfaceMethod java/util/Collection.iterator:()Ljava/util/Iterator;
+        82: astore        4
+        84: aload         4
+        86: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        91: ifeq          175
+        94: aload         4
+        96: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+       101: checkcast     #625                // class org/bukkit/entity/Player
+       104: astore        5
+       106: aload         5
+       108: invokeinterface #626,  1          // InterfaceMethod org/bukkit/entity/Player.getWorld:()Lorg/bukkit/World;
+       113: aload_2
+       114: invokeinterface #443,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getWorld:()Lorg/bukkit/World;
+       119: if_acmpne     84
+       122: aload         5
+       124: aload_2
+       125: invokeinterface #629,  2          // InterfaceMethod org/bukkit/entity/Player.canSee:(Lorg/bukkit/entity/Entity;)Z
+       130: ifne          136
+       133: goto          84
+       136: aload         5
+       138: aload_0
+       139: getfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+       142: aload_2
+       143: invokeinterface #633,  3          // InterfaceMethod org/bukkit/entity/Player.hideEntity:(Lorg/bukkit/plugin/Plugin;Lorg/bukkit/entity/Entity;)V
+       148: invokestatic  #637                // Method org/bukkit/Bukkit.getScheduler:()Lorg/bukkit/scheduler/BukkitScheduler;
+       151: aload_0
+       152: getfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+       155: aload_0
+       156: aload         5
+       158: aload_2
+       159: aload_1
+       160: invokedynamic #654,  0            // InvokeDynamic #1:run:(Ldev/monsterguard/Actors;Lorg/bukkit/entity/Player;Lorg/bukkit/entity/LivingEntity;Ldev/monsterguard/Actors$Live;)Ljava/lang/Runnable;
+       165: lconst_1
+       166: invokeinterface #660,  5          // InterfaceMethod org/bukkit/scheduler/BukkitScheduler.runTaskLater:(Lorg/bukkit/plugin/Plugin;Ljava/lang/Runnable;J)Lorg/bukkit/scheduler/BukkitTask;
+       171: pop
+       172: goto          84
+       175: return
+
+  public static void suppressNativeMovement(org.bukkit.entity.LivingEntity);
+    Code:
+         0: aload_0
+         1: instanceof    #416                // class org/bukkit/entity/Mob
+         4: ifeq          16
+         7: aload_0
+         8: checkcast     #416                // class org/bukkit/entity/Mob
+        11: astore_1
+        12: aload_1
+        13: invokestatic  #668                // Method dev/monsterguard/NativeAccess.suppressGoals:(Lorg/bukkit/entity/Mob;)V
+        16: return
+
+  public void refresh(dev.monsterguard.ActorRecord);
+    Code:
+         0: aload_0
+         1: aload_1
+         2: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+         5: invokevirtual #313                // Method despawn:(Ljava/lang/String;)V
+         8: aload_0
+         9: aload_1
+        10: iconst_1
+        11: invokevirtual #223                // Method spawn:(Ldev/monsterguard/ActorRecord;Z)V
+        14: return
+
+  public void despawn(java.lang.String);
+    Code:
+         0: aload_0
+         1: getfield      #50                 // Field live:Ljava/util/Map;
+         4: aload_1
+         5: getstatic     #83                 // Field java/util/Locale.ROOT:Ljava/util/Locale;
+         8: invokevirtual #89                 // Method java/lang/String.toLowerCase:(Ljava/util/Locale;)Ljava/lang/String;
+        11: invokeinterface #672,  2          // InterfaceMethod java/util/Map.remove:(Ljava/lang/Object;)Ljava/lang/Object;
+        16: checkcast     #11                 // class dev/monsterguard/Actors$Live
+        19: astore_2
+        20: aload_2
+        21: ifnonnull     25
+        24: return
+        25: aload_2
+        26: getfield      #676                // Field dev/monsterguard/Actors$Live.brain:Ldev/monsterguard/GuardBrain;
+        29: aload_2
+        30: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+        33: invokevirtual #679                // Method dev/monsterguard/GuardBrain.stop:(Lorg/bukkit/entity/LivingEntity;)V
+        36: aload_2
+        37: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+        40: ifnull        52
+        43: aload_2
+        44: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+        47: invokeinterface #433,  1          // InterfaceMethod org/bukkit/entity/TextDisplay.remove:()V
+        52: aload_2
+        53: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+        56: invokeinterface #680,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.remove:()V
+        61: return
+
+  public void stop();
+    Code:
+         0: aload_0
+         1: getfield      #50                 // Field live:Ljava/util/Map;
+         4: invokeinterface #685,  1          // InterfaceMethod java/util/Map.keySet:()Ljava/util/Set;
+         9: invokestatic  #75                 // InterfaceMethod java/util/List.copyOf:(Ljava/util/Collection;)Ljava/util/List;
+        12: invokeinterface #169,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+        17: astore_1
+        18: aload_1
+        19: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        24: ifeq          45
+        27: aload_1
+        28: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        33: checkcast     #85                 // class java/lang/String
+        36: astore_2
+        37: aload_0
+        38: aload_2
+        39: invokevirtual #313                // Method despawn:(Ljava/lang/String;)V
+        42: goto          18
+        45: return
+
+  private void updateName(dev.monsterguard.Actors$Live);
+    Code:
+         0: aload_1
+         1: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+         4: astore_2
+         5: aload_1
+         6: getfield      #158                // Field dev/monsterguard/Actors$Live.record:Ldev/monsterguard/ActorRecord;
+         9: astore_3
+        10: aload_2
+        11: invokeinterface #286,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getPersistentDataContainer:()Lorg/bukkit/persistence/PersistentDataContainer;
+        16: getstatic     #687                // Field DISPLAY_NAME:Lorg/bukkit/NamespacedKey;
+        19: getstatic     #110                // Field org/bukkit/persistence/PersistentDataType.STRING:Lorg/bukkit/persistence/PersistentDataType;
+        22: invokestatic  #693                // InterfaceMethod dev/monsterguard/internal/kyori/adventure/text/minimessage/MiniMessage.miniMessage:()Ldev/monsterguard/internal/kyori/adventure/text/minimessage/MiniMessage;
+        25: aload_3
+        26: invokevirtual #696                // Method dev/monsterguard/ActorRecord.name:()Ljava/lang/String;
+        29: invokestatic  #700                // Method dev/monsterguard/Words.rich:(Ljava/lang/String;)Ldev/monsterguard/internal/kyori/adventure/text/Component;
+        32: invokeinterface #704,  2          // InterfaceMethod dev/monsterguard/internal/kyori/adventure/text/minimessage/MiniMessage.serialize:(Ldev/monsterguard/internal/kyori/adventure/text/Component;)Ljava/lang/Object;
+        37: checkcast     #85                 // class java/lang/String
+        40: invokeinterface #290,  4          // InterfaceMethod org/bukkit/persistence/PersistentDataContainer.set:(Lorg/bukkit/NamespacedKey;Lorg/bukkit/persistence/PersistentDataType;Ljava/lang/Object;)V
+        45: invokestatic  #708                // Method org/bukkit/Bukkit.getPluginManager:()Lorg/bukkit/plugin/PluginManager;
+        48: ldc_w         #710                // String MobAnzeige
+        51: invokeinterface #716,  2          // InterfaceMethod org/bukkit/plugin/PluginManager.getPlugin:(Ljava/lang/String;)Lorg/bukkit/plugin/Plugin;
+        56: astore        4
+        58: aload_2
+        59: instanceof    #416                // class org/bukkit/entity/Mob
+        62: ifeq          109
+        65: aload         4
+        67: ifnull        109
+        70: aload         4
+        72: invokeinterface #721,  1          // InterfaceMethod org/bukkit/plugin/Plugin.isEnabled:()Z
+        77: ifeq          109
+        80: aload_2
+        81: invokeinterface #443,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getWorld:()Lorg/bukkit/World;
+        86: invokeinterface #722,  1          // InterfaceMethod org/bukkit/World.getPersistentDataContainer:()Lorg/bukkit/persistence/PersistentDataContainer;
+        91: getstatic     #724                // Field LABEL_PROVIDER:Lorg/bukkit/NamespacedKey;
+        94: getstatic     #727                // Field org/bukkit/persistence/PersistentDataType.BYTE:Lorg/bukkit/persistence/PersistentDataType;
+        97: invokeinterface #134,  3          // InterfaceMethod org/bukkit/persistence/PersistentDataContainer.has:(Lorg/bukkit/NamespacedKey;Lorg/bukkit/persistence/PersistentDataType;)Z
+       102: ifeq          109
+       105: iconst_1
+       106: goto          110
+       109: iconst_0
+       110: istore        5
+       112: iload         5
+       114: ifeq          121
+       117: aconst_null
+       118: goto          128
+       121: aload_3
+       122: invokevirtual #696                // Method dev/monsterguard/ActorRecord.name:()Ljava/lang/String;
+       125: invokestatic  #483                // Method dev/monsterguard/Words.legacy:(Ljava/lang/String;)Ljava/lang/String;
+       128: astore        6
+       130: aload_2
+       131: invokeinterface #730,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getCustomName:()Ljava/lang/String;
+       136: aload         6
+       138: invokestatic  #556                // Method java/util/Objects.equals:(Ljava/lang/Object;Ljava/lang/Object;)Z
+       141: ifne          152
+       144: aload_2
+       145: aload         6
+       147: invokeinterface #733,  2          // InterfaceMethod org/bukkit/entity/LivingEntity.setCustomName:(Ljava/lang/String;)V
+       152: aload_2
+       153: iload         5
+       155: ifne          173
+       158: aload_3
+       159: ldc_w         #735                // String show-name
+       162: iconst_1
+       163: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+       166: ifeq          173
+       169: iconst_1
+       170: goto          174
+       173: iconst_0
+       174: invokeinterface #738,  2          // InterfaceMethod org/bukkit/entity/LivingEntity.setCustomNameVisible:(Z)V
+       179: return
+
+  public void ambient(dev.monsterguard.Actors$Live);
+    Code:
+         0: aload_1
+         1: getfield      #158                // Field dev/monsterguard/Actors$Live.record:Ldev/monsterguard/ActorRecord;
+         4: astore_2
+         5: aload_1
+         6: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+         9: astore_3
+        10: aload_0
+        11: aload_1
+        12: invokevirtual #352                // Method updateName:(Ldev/monsterguard/Actors$Live;)V
+        15: aload_0
+        16: aload_1
+        17: invokevirtual #744                // Method maintainArmor:(Ldev/monsterguard/Actors$Live;)V
+        20: aload_1
+        21: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+        24: ifnull        70
+        27: aload_1
+        28: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+        31: invokeinterface #747,  1          // InterfaceMethod org/bukkit/entity/TextDisplay.isValid:()Z
+        36: ifeq          70
+        39: aload_1
+        40: getfield      #184                // Field dev/monsterguard/Actors$Live.caption:Lorg/bukkit/entity/TextDisplay;
+        43: aload_3
+        44: invokeinterface #446,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getLocation:()Lorg/bukkit/Location;
+        49: dconst_0
+        50: aload_3
+        51: invokeinterface #450,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getHeight:()D
+        56: ldc2_w        #451                // double 0.35d
+        59: dadd
+        60: dconst_0
+        61: invokevirtual #455                // Method org/bukkit/Location.add:(DDD)Lorg/bukkit/Location;
+        64: invokeinterface #751,  2          // InterfaceMethod org/bukkit/entity/TextDisplay.teleport:(Lorg/bukkit/Location;)Z
+        69: pop
+        70: aload_2
+        71: ldc_w         #386                // String look-at-players
+        74: iconst_1
+        75: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+        78: ifeq          269
+        81: aload_2
+        82: invokevirtual #379                // Method dev/monsterguard/ActorRecord.guard:()Z
+        85: ifeq          101
+        88: aload_1
+        89: getfield      #676                // Field dev/monsterguard/Actors$Live.brain:Ldev/monsterguard/GuardBrain;
+        92: getfield      #754                // Field dev/monsterguard/GuardBrain.state:Ldev/monsterguard/GuardBrain$Mode;
+        95: getstatic     #757                // Field dev/monsterguard/GuardBrain$Mode.POST:Ldev/monsterguard/GuardBrain$Mode;
+        98: if_acmpne     269
+       101: aconst_null
+       102: astore        4
+       104: aload_2
+       105: ldc_w         #759                // String look-range
+       108: ldc2_w        #760                // double 8.0d
+       111: invokevirtual #765                // Method dev/monsterguard/ActorRecord.number:(Ljava/lang/String;D)D
+       114: ldc2_w        #766                // double 2.0d
+       117: invokestatic  #773                // Method java/lang/Math.pow:(DD)D
+       120: dstore        5
+       122: aload_3
+       123: invokeinterface #443,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getWorld:()Lorg/bukkit/World;
+       128: invokeinterface #776,  1          // InterfaceMethod org/bukkit/World.getPlayers:()Ljava/util/List;
+       133: invokeinterface #169,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+       138: astore        7
+       140: aload         7
+       142: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+       147: ifeq          236
+       150: aload         7
+       152: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+       157: checkcast     #625                // class org/bukkit/entity/Player
+       160: astore        8
+       162: aload         8
+       164: invokeinterface #780,  1          // InterfaceMethod org/bukkit/entity/Player.getGameMode:()Lorg/bukkit/GameMode;
+       169: getstatic     #786                // Field org/bukkit/GameMode.SPECTATOR:Lorg/bukkit/GameMode;
+       172: if_acmpeq     140
+       175: aload         8
+       177: invokeinterface #789,  1          // InterfaceMethod org/bukkit/entity/Player.isInvisible:()Z
+       182: ifne          140
+       185: aload_3
+       186: aload         8
+       188: invokeinterface #792,  2          // InterfaceMethod org/bukkit/entity/LivingEntity.hasLineOfSight:(Lorg/bukkit/entity/Entity;)Z
+       193: ifne          199
+       196: goto          140
+       199: aload         8
+       201: invokeinterface #793,  1          // InterfaceMethod org/bukkit/entity/Player.getLocation:()Lorg/bukkit/Location;
+       206: aload_3
+       207: invokeinterface #446,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getLocation:()Lorg/bukkit/Location;
+       212: invokevirtual #797                // Method org/bukkit/Location.distanceSquared:(Lorg/bukkit/Location;)D
+       215: dstore        9
+       217: dload         9
+       219: dload         5
+       221: dcmpg
+       222: ifge          233
+       225: dload         9
+       227: dstore        5
+       229: aload         8
+       231: astore        4
+       233: goto          140
+       236: aload         4
+       238: ifnull        255
+       241: aload_3
+       242: aload         4
+       244: invokeinterface #800,  1          // InterfaceMethod org/bukkit/entity/Player.getEyeLocation:()Lorg/bukkit/Location;
+       249: invokestatic  #804                // Method face:(Lorg/bukkit/entity/LivingEntity;Lorg/bukkit/Location;)V
+       252: goto          269
+       255: aload_3
+       256: aload_2
+       257: invokevirtual #238                // Method dev/monsterguard/ActorRecord.home:()Ldev/monsterguard/Spot;
+       260: invokevirtual #390                // Method dev/monsterguard/Spot.yaw:()F
+       263: fconst_0
+       264: invokeinterface #394,  3          // InterfaceMethod org/bukkit/entity/LivingEntity.setRotation:(FF)V
+       269: aload_2
+       270: ldc_w         #386                // String look-at-players
+       273: iconst_1
+       274: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+       277: ifne          329
+       280: aload_2
+       281: invokevirtual #379                // Method dev/monsterguard/ActorRecord.guard:()Z
+       284: ifeq          313
+       287: aload_1
+       288: getfield      #676                // Field dev/monsterguard/Actors$Live.brain:Ldev/monsterguard/GuardBrain;
+       291: getfield      #754                // Field dev/monsterguard/GuardBrain.state:Ldev/monsterguard/GuardBrain$Mode;
+       294: getstatic     #757                // Field dev/monsterguard/GuardBrain$Mode.POST:Ldev/monsterguard/GuardBrain$Mode;
+       297: if_acmpeq     313
+       300: aload_1
+       301: getfield      #676                // Field dev/monsterguard/Actors$Live.brain:Ldev/monsterguard/GuardBrain;
+       304: getfield      #754                // Field dev/monsterguard/GuardBrain.state:Ldev/monsterguard/GuardBrain$Mode;
+       307: getstatic     #807                // Field dev/monsterguard/GuardBrain$Mode.OFF:Ldev/monsterguard/GuardBrain$Mode;
+       310: if_acmpne     329
+       313: aload_3
+       314: aload_3
+       315: invokeinterface #446,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getLocation:()Lorg/bukkit/Location;
+       320: invokevirtual #810                // Method org/bukkit/Location.getYaw:()F
+       323: fconst_0
+       324: invokeinterface #394,  3          // InterfaceMethod org/bukkit/entity/LivingEntity.setRotation:(FF)V
+       329: aload_2
+       330: invokevirtual #379                // Method dev/monsterguard/ActorRecord.guard:()Z
+       333: ifeq          360
+       336: aload_1
+       337: getfield      #676                // Field dev/monsterguard/Actors$Live.brain:Ldev/monsterguard/GuardBrain;
+       340: getfield      #754                // Field dev/monsterguard/GuardBrain.state:Ldev/monsterguard/GuardBrain$Mode;
+       343: getstatic     #757                // Field dev/monsterguard/GuardBrain$Mode.POST:Ldev/monsterguard/GuardBrain$Mode;
+       346: if_acmpne     360
+       349: aload_3
+       350: aload_2
+       351: invokevirtual #238                // Method dev/monsterguard/ActorRecord.home:()Ldev/monsterguard/Spot;
+       354: invokevirtual #390                // Method dev/monsterguard/Spot.yaw:()F
+       357: invokestatic  #620                // Method dev/monsterguard/NativeAccess.bodyYaw:(Lorg/bukkit/entity/LivingEntity;F)V
+       360: aload_2
+       361: ldc_w         #812                // String particle
+       364: ldc_w         #814                // String NONE
+       367: invokevirtual #817                // Method dev/monsterguard/ActorRecord.text:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+       370: astore        4
+       372: aload         4
+       374: ldc_w         #814                // String NONE
+       377: invokevirtual #818                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+       380: ifne          442
+       383: aload         4
+       385: invokestatic  #823                // Method org/bukkit/Particle.valueOf:(Ljava/lang/String;)Lorg/bukkit/Particle;
+       388: astore        5
+       390: aload         5
+       392: invokevirtual #827                // Method org/bukkit/Particle.getDataType:()Ljava/lang/Class;
+       395: ldc_w         #829                // class java/lang/Void
+       398: if_acmpne     437
+       401: aload_3
+       402: invokeinterface #443,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getWorld:()Lorg/bukkit/World;
+       407: aload         5
+       409: aload_3
+       410: invokeinterface #446,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getLocation:()Lorg/bukkit/Location;
+       415: dconst_0
+       416: dconst_1
+       417: dconst_0
+       418: invokevirtual #455                // Method org/bukkit/Location.add:(DDD)Lorg/bukkit/Location;
+       421: iconst_2
+       422: ldc2_w        #830                // double 0.25d
+       425: ldc2_w        #832                // double 0.4d
+       428: ldc2_w        #830                // double 0.25d
+       431: dconst_0
+       432: invokeinterface #837,  12         // InterfaceMethod org/bukkit/World.spawnParticle:(Lorg/bukkit/Particle;Lorg/bukkit/Location;IDDDD)V
+       437: goto          442
+       440: astore        5
+       442: new           #52                 // class java/util/HashSet
+       445: dup
+       446: invokespecial #53                 // Method java/util/HashSet."<init>":()V
+       449: astore        5
+       451: aload_2
+       452: ldc_w         #839                // String chat-on-approach
+       455: iconst_0
+       456: invokevirtual #358                // Method dev/monsterguard/ActorRecord.flag:(Ljava/lang/String;Z)Z
+       459: ifeq          630
+       462: aload_2
+       463: ldc_w         #841                // String chat-message
+       466: ldc_w         #843                // String
+       469: invokevirtual #817                // Method dev/monsterguard/ActorRecord.text:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+       472: invokevirtual #846                // Method java/lang/String.isBlank:()Z
+       475: ifne          630
+       478: aload_3
+       479: invokeinterface #443,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getWorld:()Lorg/bukkit/World;
+       484: invokeinterface #776,  1          // InterfaceMethod org/bukkit/World.getPlayers:()Ljava/util/List;
+       489: invokeinterface #169,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+       494: astore        6
+       496: aload         6
+       498: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+       503: ifeq          630
+       506: aload         6
+       508: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+       513: checkcast     #625                // class org/bukkit/entity/Player
+       516: astore        7
+       518: aload         7
+       520: invokeinterface #780,  1          // InterfaceMethod org/bukkit/entity/Player.getGameMode:()Lorg/bukkit/GameMode;
+       525: getstatic     #786                // Field org/bukkit/GameMode.SPECTATOR:Lorg/bukkit/GameMode;
+       528: if_acmpeq     496
+       531: aload_0
+       532: getfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+       535: aload         7
+       537: aload_2
+       538: invokevirtual #850                // Method dev/monsterguard/MonsterGuardPlugin.allowed:(Lorg/bukkit/entity/Player;Ldev/monsterguard/ActorRecord;)Z
+       541: ifne          547
+       544: goto          496
+       547: aload         7
+       549: invokeinterface #793,  1          // InterfaceMethod org/bukkit/entity/Player.getLocation:()Lorg/bukkit/Location;
+       554: aload_3
+       555: invokeinterface #446,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getLocation:()Lorg/bukkit/Location;
+       560: invokevirtual #797                // Method org/bukkit/Location.distanceSquared:(Lorg/bukkit/Location;)D
+       563: aload_2
+       564: ldc_w         #852                // String chat-range
+       567: ldc2_w        #853                // double 4.0d
+       570: invokevirtual #765                // Method dev/monsterguard/ActorRecord.number:(Ljava/lang/String;D)D
+       573: ldc2_w        #766                // double 2.0d
+       576: invokestatic  #773                // Method java/lang/Math.pow:(DD)D
+       579: dcmpg
+       580: ifgt          627
+       583: aload         5
+       585: aload         7
+       587: invokeinterface #855,  1          // InterfaceMethod org/bukkit/entity/Player.getUniqueId:()Ljava/util/UUID;
+       592: invokeinterface #264,  2          // InterfaceMethod java/util/Set.add:(Ljava/lang/Object;)Z
+       597: pop
+       598: aload_1
+       599: getfield      #858                // Field dev/monsterguard/Actors$Live.near:Ljava/util/Set;
+       602: aload         7
+       604: invokeinterface #855,  1          // InterfaceMethod org/bukkit/entity/Player.getUniqueId:()Ljava/util/UUID;
+       609: invokeinterface #234,  2          // InterfaceMethod java/util/Set.contains:(Ljava/lang/Object;)Z
+       614: ifne          627
+       617: aload_0
+       618: getfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+       621: aload         7
+       623: aload_2
+       624: invokevirtual #862                // Method dev/monsterguard/MonsterGuardPlugin.speak:(Lorg/bukkit/entity/Player;Ldev/monsterguard/ActorRecord;)V
+       627: goto          496
+       630: aload_1
+       631: getfield      #858                // Field dev/monsterguard/Actors$Live.near:Ljava/util/Set;
+       634: invokeinterface #865,  1          // InterfaceMethod java/util/Set.clear:()V
+       639: aload_1
+       640: getfield      #858                // Field dev/monsterguard/Actors$Live.near:Ljava/util/Set;
+       643: aload         5
+       645: invokeinterface #869,  2          // InterfaceMethod java/util/Set.addAll:(Ljava/util/Collection;)Z
+       650: pop
+       651: return
+      Exception table:
+         from    to  target type
+           383   437   440   Class java/lang/IllegalArgumentException
+
+  public static void face(org.bukkit.entity.LivingEntity, org.bukkit.Location);
+    Code:
+         0: aload_1
+         1: invokevirtual #880                // Method org/bukkit/Location.toVector:()Lorg/bukkit/util/Vector;
+         4: aload_0
+         5: invokeinterface #881,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getEyeLocation:()Lorg/bukkit/Location;
+        10: invokevirtual #880                // Method org/bukkit/Location.toVector:()Lorg/bukkit/util/Vector;
+        13: invokevirtual #885                // Method org/bukkit/util/Vector.subtract:(Lorg/bukkit/util/Vector;)Lorg/bukkit/util/Vector;
+        16: astore_2
+        17: aload_2
+        18: invokevirtual #888                // Method org/bukkit/util/Vector.lengthSquared:()D
+        21: ldc2_w        #889                // double 1.0E-4d
+        24: dcmpg
+        25: ifge          29
+        28: return
+        29: aload_0
+        30: invokeinterface #446,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getLocation:()Lorg/bukkit/Location;
+        35: aload_2
+        36: invokevirtual #894                // Method org/bukkit/Location.setDirection:(Lorg/bukkit/util/Vector;)Lorg/bukkit/Location;
+        39: astore_3
+        40: aload_0
+        41: aload_3
+        42: invokevirtual #810                // Method org/bukkit/Location.getYaw:()F
+        45: aload_3
+        46: invokevirtual #897                // Method org/bukkit/Location.getPitch:()F
+        49: invokeinterface #394,  3          // InterfaceMethod org/bukkit/entity/LivingEntity.setRotation:(FF)V
+        54: return
+
+  public void worldLoad(org.bukkit.event.world.WorldLoadEvent);
+    Code:
+         0: aload_0
+         1: getfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+         4: invokevirtual #213                // Method dev/monsterguard/MonsterGuardPlugin.records:()Ldev/monsterguard/Archive;
+         7: invokevirtual #218                // Method dev/monsterguard/Archive.all:()Ljava/util/Collection;
+        10: invokeinterface #219,  1          // InterfaceMethod java/util/Collection.iterator:()Ljava/util/Iterator;
+        15: astore_2
+        16: aload_2
+        17: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        22: ifeq          66
+        25: aload_2
+        26: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        31: checkcast     #160                // class dev/monsterguard/ActorRecord
+        34: astore_3
+        35: aload_3
+        36: invokevirtual #238                // Method dev/monsterguard/ActorRecord.home:()Ldev/monsterguard/Spot;
+        39: invokevirtual #906                // Method dev/monsterguard/Spot.world:()Ljava/lang/String;
+        42: aload_1
+        43: invokevirtual #909                // Method org/bukkit/event/world/WorldLoadEvent.getWorld:()Lorg/bukkit/World;
+        46: invokeinterface #912,  1          // InterfaceMethod org/bukkit/World.getName:()Ljava/lang/String;
+        51: invokevirtual #818                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+        54: ifeq          63
+        57: aload_0
+        58: aload_3
+        59: iconst_1
+        60: invokevirtual #223                // Method spawn:(Ldev/monsterguard/ActorRecord;Z)V
+        63: goto          16
+        66: return
+
+  public void chunkLoad(org.bukkit.event.world.ChunkLoadEvent);
+    Code:
+         0: aload_0
+         1: aload_1
+         2: invokevirtual #922                // Method org/bukkit/event/world/ChunkLoadEvent.getChunk:()Lorg/bukkit/Chunk;
+         5: invokeinterface #927,  1          // InterfaceMethod org/bukkit/Chunk.getEntities:()[Lorg/bukkit/entity/Entity;
+        10: invokestatic  #933                // Method java/util/Arrays.asList:([Ljava/lang/Object;)Ljava/util/List;
+        13: invokevirtual #207                // Method removeOrphans:(Ljava/util/Collection;)V
+        16: aload_0
+        17: getfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+        20: invokevirtual #213                // Method dev/monsterguard/MonsterGuardPlugin.records:()Ldev/monsterguard/Archive;
+        23: invokevirtual #218                // Method dev/monsterguard/Archive.all:()Ljava/util/Collection;
+        26: invokeinterface #219,  1          // InterfaceMethod java/util/Collection.iterator:()Ljava/util/Iterator;
+        31: astore_2
+        32: aload_2
+        33: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        38: ifeq          132
+        41: aload_2
+        42: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        47: checkcast     #160                // class dev/monsterguard/ActorRecord
+        50: astore_3
+        51: aload_3
+        52: invokevirtual #238                // Method dev/monsterguard/ActorRecord.home:()Ldev/monsterguard/Spot;
+        55: invokevirtual #906                // Method dev/monsterguard/Spot.world:()Ljava/lang/String;
+        58: aload_1
+        59: invokevirtual #934                // Method org/bukkit/event/world/ChunkLoadEvent.getWorld:()Lorg/bukkit/World;
+        62: invokeinterface #912,  1          // InterfaceMethod org/bukkit/World.getName:()Ljava/lang/String;
+        67: invokevirtual #818                // Method java/lang/String.equals:(Ljava/lang/Object;)Z
+        70: ifeq          129
+        73: aload_3
+        74: invokevirtual #238                // Method dev/monsterguard/ActorRecord.home:()Ldev/monsterguard/Spot;
+        77: invokevirtual #937                // Method dev/monsterguard/Spot.x:()D
+        80: invokestatic  #941                // Method java/lang/Math.floor:(D)D
+        83: d2i
+        84: iconst_4
+        85: ishr
+        86: aload_1
+        87: invokevirtual #922                // Method org/bukkit/event/world/ChunkLoadEvent.getChunk:()Lorg/bukkit/Chunk;
+        90: invokeinterface #944,  1          // InterfaceMethod org/bukkit/Chunk.getX:()I
+        95: if_icmpne     129
+        98: aload_3
+        99: invokevirtual #238                // Method dev/monsterguard/ActorRecord.home:()Ldev/monsterguard/Spot;
+       102: invokevirtual #947                // Method dev/monsterguard/Spot.z:()D
+       105: invokestatic  #941                // Method java/lang/Math.floor:(D)D
+       108: d2i
+       109: iconst_4
+       110: ishr
+       111: aload_1
+       112: invokevirtual #922                // Method org/bukkit/event/world/ChunkLoadEvent.getChunk:()Lorg/bukkit/Chunk;
+       115: invokeinterface #950,  1          // InterfaceMethod org/bukkit/Chunk.getZ:()I
+       120: if_icmpne     129
+       123: aload_0
+       124: aload_3
+       125: iconst_0
+       126: invokevirtual #223                // Method spawn:(Ldev/monsterguard/ActorRecord;Z)V
+       129: goto          32
+       132: return
+
+  public void chunkUnload(org.bukkit.event.world.ChunkUnloadEvent);
+    Code:
+         0: aload_0
+         1: invokevirtual #957                // Method active:()Ljava/util/Collection;
+         4: invokeinterface #219,  1          // InterfaceMethod java/util/Collection.iterator:()Ljava/util/Iterator;
+         9: astore_2
+        10: aload_2
+        11: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        16: ifeq          83
+        19: aload_2
+        20: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        25: checkcast     #11                 // class dev/monsterguard/Actors$Live
+        28: astore_3
+        29: aload_3
+        30: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+        33: invokeinterface #443,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getWorld:()Lorg/bukkit/World;
+        38: aload_1
+        39: invokevirtual #960                // Method org/bukkit/event/world/ChunkUnloadEvent.getWorld:()Lorg/bukkit/World;
+        42: if_acmpne     80
+        45: aload_3
+        46: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+        49: invokeinterface #446,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getLocation:()Lorg/bukkit/Location;
+        54: invokevirtual #961                // Method org/bukkit/Location.getChunk:()Lorg/bukkit/Chunk;
+        57: aload_1
+        58: invokevirtual #962                // Method org/bukkit/event/world/ChunkUnloadEvent.getChunk:()Lorg/bukkit/Chunk;
+        61: invokeinterface #963,  2          // InterfaceMethod org/bukkit/Chunk.equals:(Ljava/lang/Object;)Z
+        66: ifeq          80
+        69: aload_0
+        70: aload_3
+        71: getfield      #158                // Field dev/monsterguard/Actors$Live.record:Ldev/monsterguard/ActorRecord;
+        74: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+        77: invokevirtual #313                // Method despawn:(Ljava/lang/String;)V
+        80: goto          10
+        83: return
+
+  public void worldUnload(org.bukkit.event.world.WorldUnloadEvent);
+    Code:
+         0: aload_1
+         1: invokevirtual #971                // Method org/bukkit/event/world/WorldUnloadEvent.isCancelled:()Z
+         4: ifne          66
+         7: aload_0
+         8: invokevirtual #957                // Method active:()Ljava/util/Collection;
+        11: invokeinterface #219,  1          // InterfaceMethod java/util/Collection.iterator:()Ljava/util/Iterator;
+        16: astore_2
+        17: aload_2
+        18: invokeinterface #175,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        23: ifeq          66
+        26: aload_2
+        27: invokeinterface #179,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        32: checkcast     #11                 // class dev/monsterguard/Actors$Live
+        35: astore_3
+        36: aload_3
+        37: getfield      #141                // Field dev/monsterguard/Actors$Live.entity:Lorg/bukkit/entity/LivingEntity;
+        40: invokeinterface #443,  1          // InterfaceMethod org/bukkit/entity/LivingEntity.getWorld:()Lorg/bukkit/World;
+        45: aload_1
+        46: invokevirtual #972                // Method org/bukkit/event/world/WorldUnloadEvent.getWorld:()Lorg/bukkit/World;
+        49: if_acmpne     63
+        52: aload_0
+        53: aload_3
+        54: getfield      #158                // Field dev/monsterguard/Actors$Live.record:Ldev/monsterguard/ActorRecord;
+        57: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+        60: invokevirtual #313                // Method despawn:(Ljava/lang/String;)V
+        63: goto          17
+        66: return
+
+  public void combust(org.bukkit.event.entity.EntityCombustEvent);
+    Code:
+         0: aload_1
+         1: invokevirtual #981                // Method org/bukkit/event/entity/EntityCombustEvent.getEntity:()Lorg/bukkit/entity/Entity;
+         4: invokestatic  #121                // Method owner:(Lorg/bukkit/entity/Entity;)Ljava/lang/String;
+         7: ifnull        15
+        10: aload_1
+        11: iconst_1
+        12: invokevirtual #984                // Method org/bukkit/event/entity/EntityCombustEvent.setCancelled:(Z)V
+        15: return
+
+  public void target(org.bukkit.event.entity.EntityTargetLivingEntityEvent);
+    Code:
+         0: aload_0
+         1: aload_1
+         2: invokevirtual #989                // Method org/bukkit/event/entity/EntityTargetLivingEntityEvent.getEntity:()Lorg/bukkit/entity/Entity;
+         5: invokevirtual #991                // Method from:(Lorg/bukkit/entity/Entity;)Ldev/monsterguard/ActorRecord;
+         8: ifnull        16
+        11: aload_1
+        12: iconst_1
+        13: invokevirtual #992                // Method org/bukkit/event/entity/EntityTargetLivingEntityEvent.setCancelled:(Z)V
+        16: return
+
+  public void death(org.bukkit.event.entity.EntityDeathEvent);
+    Code:
+         0: aload_0
+         1: aload_1
+         2: invokevirtual #1000               // Method org/bukkit/event/entity/EntityDeathEvent.getEntity:()Lorg/bukkit/entity/LivingEntity;
+         5: invokevirtual #991                // Method from:(Lorg/bukkit/entity/Entity;)Ldev/monsterguard/ActorRecord;
+         8: astore_2
+         9: aload_2
+        10: ifnonnull     14
+        13: return
+        14: aload_1
+        15: invokevirtual #1003               // Method org/bukkit/event/entity/EntityDeathEvent.getDrops:()Ljava/util/List;
+        18: invokeinterface #1004,  1         // InterfaceMethod java/util/List.clear:()V
+        23: aload_1
+        24: iconst_0
+        25: invokevirtual #1008               // Method org/bukkit/event/entity/EntityDeathEvent.setDroppedExp:(I)V
+        28: aload_0
+        29: aload_2
+        30: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+        33: invokevirtual #313                // Method despawn:(Ljava/lang/String;)V
+        36: invokestatic  #637                // Method org/bukkit/Bukkit.getScheduler:()Lorg/bukkit/scheduler/BukkitScheduler;
+        39: aload_0
+        40: getfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+        43: aload_0
+        44: aload_2
+        45: invokedynamic #1015,  0           // InvokeDynamic #2:run:(Ldev/monsterguard/Actors;Ldev/monsterguard/ActorRecord;)Ljava/lang/Runnable;
+        50: ldc2_w        #1016               // long 100l
+        53: invokeinterface #660,  5          // InterfaceMethod org/bukkit/scheduler/BukkitScheduler.runTaskLater:(Lorg/bukkit/plugin/Plugin;Ljava/lang/Runnable;J)Lorg/bukkit/scheduler/BukkitTask;
+        58: pop
+        59: return
+
+  private void lambda$death$0(dev.monsterguard.ActorRecord);
+    Code:
+         0: aload_0
+         1: getfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+         4: invokevirtual #213                // Method dev/monsterguard/MonsterGuardPlugin.records:()Ldev/monsterguard/Archive;
+         7: aload_1
+         8: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+        11: invokevirtual #1022               // Method dev/monsterguard/Archive.find:(Ljava/lang/String;)Ldev/monsterguard/ActorRecord;
+        14: aload_1
+        15: if_acmpne     24
+        18: aload_0
+        19: aload_1
+        20: iconst_0
+        21: invokevirtual #223                // Method spawn:(Ldev/monsterguard/ActorRecord;Z)V
+        24: return
+
+  private void lambda$alignPostedModel$0(org.bukkit.entity.Player, org.bukkit.entity.LivingEntity, dev.monsterguard.Actors$Live);
+    Code:
+         0: aload_1
+         1: invokeinterface #1025,  1         // InterfaceMethod org/bukkit/entity/Player.isOnline:()Z
+         6: ifeq          44
+         9: aload_2
+        10: invokeinterface #1026,  1         // InterfaceMethod org/bukkit/entity/LivingEntity.isValid:()Z
+        15: ifeq          44
+        18: aload_0
+        19: aload_3
+        20: getfield      #158                // Field dev/monsterguard/Actors$Live.record:Ldev/monsterguard/ActorRecord;
+        23: getfield      #229                // Field dev/monsterguard/ActorRecord.id:Ljava/lang/String;
+        26: invokevirtual #138                // Method get:(Ljava/lang/String;)Ldev/monsterguard/Actors$Live;
+        29: aload_3
+        30: if_acmpne     44
+        33: aload_1
+        34: aload_0
+        35: getfield      #59                 // Field app:Ldev/monsterguard/MonsterGuardPlugin;
+        38: aload_2
+        39: invokeinterface #1029,  3         // InterfaceMethod org/bukkit/entity/Player.showEntity:(Lorg/bukkit/plugin/Plugin;Lorg/bukkit/entity/Entity;)V
+        44: return
+
+  static {};
+    Code:
+         0: new           #123                // class org/bukkit/NamespacedKey
+         3: dup
+         4: ldc_w         #1032               // String monsterguard
+         7: ldc           #127                // String actor
+         9: invokespecial #130                // Method org/bukkit/NamespacedKey."<init>":(Ljava/lang/String;Ljava/lang/String;)V
+        12: putstatic     #104                // Field OWNER:Lorg/bukkit/NamespacedKey;
+        15: new           #123                // class org/bukkit/NamespacedKey
+        18: dup
+        19: ldc           #125                // String guardtradenpc
+        21: ldc_w         #1034               // String display-name
+        24: invokespecial #130                // Method org/bukkit/NamespacedKey."<init>":(Ljava/lang/String;Ljava/lang/String;)V
+        27: putstatic     #687                // Field DISPLAY_NAME:Lorg/bukkit/NamespacedKey;
+        30: new           #123                // class org/bukkit/NamespacedKey
+        33: dup
+        34: ldc_w         #1036               // String mobanzeige
+        37: ldc_w         #1038               // String native-name-integration
+        40: invokespecial #130                // Method org/bukkit/NamespacedKey."<init>":(Ljava/lang/String;Ljava/lang/String;)V
+        43: putstatic     #724                // Field LABEL_PROVIDER:Lorg/bukkit/NamespacedKey;
+        46: return
+}
